@@ -6,5 +6,6 @@ ScrollViewの使い方を学習し、カスタムモディファイアを作成�
 
 ## このサンプルで学んだこと
 
-参考にしたページ
-[https://www.youtube.com/watch?v=TCpZwZ9MiMY](SwiftUI 2.0 Scroll To Top With Floating Action Button - ScrollView Offset - SwiftUI Tutorials)
+
+# 参考にしたページ
+[SwiftUI 2.0 Scroll To Top With Floating Action Button - ScrollView Offset - SwiftUI Tutorials](https://www.youtube.com/watch?v=TCpZwZ9MiMY)
