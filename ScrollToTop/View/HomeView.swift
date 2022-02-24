@@ -8,18 +8,17 @@
 import SwiftUI
 
 struct HomeView: View {
-    
+    // ↑ボタンを表示する処理に使う
     @State private var scrollViewOffset: CGFloat = 0
     
     // Getting Start Offset and eliminating from current offset so that we will get exact offset...
+    //
     @State private var startOffset: CGFloat = 0
     
     var body: some View {
         // Scroll To Top Function...
         // with the help of ScrollViewRieader...
-        ScrollViewReader{ proxyReader in
-            
-            
+        ScrollViewReader{ proxyReader in   // ScrollViewProxyインスタンスを取得
             ScrollView(.vertical, showsIndicators: false){
                 VStack(spacing: 25){
                     ForEach(1...30, id: \.self){ index in
@@ -53,6 +52,7 @@ struct HomeView: View {
                 .overlay(
                     // Using GeometryReader to get ScrollView Offset...
                     GeometryReader{ proxy -> Color in
+                        //メインスレッド
                         DispatchQueue.main.async {
                             if startOffset == 0{
                                 self.startOffset = proxy.frame(in: .global).minY
@@ -60,7 +60,7 @@ struct HomeView: View {
                         }
                         let offset = proxy.frame(in: .global).minY
                         self.scrollViewOffset = offset - startOffset
-                        // スクロール時のY座標の位置を出力
+                        // スクロール時の変数の値を(Y座標の位置)を出力
                         print("scrollViewOffsetの値\(self.scrollViewOffset)")
                         print("-----------------")
                         print("startOffsetの値\(startOffset)")
@@ -70,7 +70,7 @@ struct HomeView: View {
                         
                     }// GeometryReader
                         .frame(width: 0, height: 0)
-                    , alignment: .top
+                    , alignment: .topTrailing
                 )// .overlay
             }// ScrollView
             // if offset goes less than 450 the showing floating action button at bottom...
@@ -78,6 +78,8 @@ struct HomeView: View {
                 Button{
                     // Scroll to top with animation...
                     withAnimation(.spring()){
+                        // scrollToメソッドの第二引数に対象の要素（View）をどの位置までスクロールさせるかUnitPointで指定する。
+                        // 今回は.topを指定しているので、ページトップまでスクロールする。
                         proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
                     }
                 }label: {
@@ -100,6 +102,9 @@ struct HomeView: View {
             )// .overlay
         }// ScrollViewReader
     }
+    func getSafeArea() -> UIEdgeInsets {
+        return UIApplication.shared.windows.first?.safeAreaInsets ?? UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
 }
 
 struct HomeView_Previews: PreviewProvider {
@@ -110,7 +115,6 @@ struct HomeView_Previews: PreviewProvider {
 
 // extending view to get safearea...
 extension View{
-    
     func getSafeArea() -> UIEdgeInsets {
         return UIApplication.shared.windows.first?.safeAreaInsets ?? UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
